@@ -11,7 +11,6 @@ import { Calendar } from 'primereact/calendar';
 import { MultiSelect } from 'primereact/multiselect';
 import { Slider } from 'primereact/slider';
 import { TriStateCheckbox } from 'primereact/tristatecheckbox';
-import { Rating } from 'primereact/rating';
 import { CustomerService } from '../../../demo/service/CustomerService';
 import { ProductService } from '../../../demo/service/ProductService';
 import getConfig from 'next/config';
@@ -89,13 +88,6 @@ const TableDemo = () => {
         initFilters1();
     }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-    const balanceTemplate = (rowData) => {
-        return (
-            <div>
-                <span className="text-bold">{formatCurrency(rowData.balance)}</span>
-            </div>
-        );
-    };
 
     const getCustomers = (data) => {
         return [...(data || [])].map((d) => {
@@ -234,111 +226,13 @@ const TableDemo = () => {
         return <TriStateCheckbox value={options.value} onChange={(e) => options.filterCallback(e.value)} />;
     };
 
-    const toggleAll = () => {
-        if (allExpanded) collapseAll();
-        else expandAll();
-    };
-
-    const expandAll = () => {
-        let _expandedRows = {};
-        products.forEach((p) => (_expandedRows[`${p.id}`] = true));
-
-        setExpandedRows(_expandedRows);
-        setAllExpanded(true);
-    };
-
-    const collapseAll = () => {
-        setExpandedRows(null);
-        setAllExpanded(false);
-    };
-
-    const amountBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.amount);
-    };
-
-    const statusOrderBodyTemplate = (rowData) => {
-        return <span className={`order-badge order-${rowData.status.toLowerCase()}`}>{rowData.status}</span>;
-    };
-
-    const searchBodyTemplate = () => {
-        return <Button icon="pi pi-search" />;
-    };
-
-    const imageBodyTemplate = (rowData) => {
-        return <img src={`${contextPath}/demo/images/product/${rowData.image}`} onError={(e) => (e.target.src = 'https://www.primefaces.org/wp-content/uploads/2020/05/placeholder.png')} alt={rowData.image} className="shadow-2" width={100} />;
-    };
-
-    const priceBodyTemplate = (rowData) => {
-        return formatCurrency(rowData.price);
-    };
-
-    const ratingBodyTemplate = (rowData) => {
-        return <Rating value={rowData.rating} readOnly cancel={false} />;
-    };
-
-    const statusBodyTemplate2 = (rowData) => {
-        return <span className={`product-badge status-${rowData.inventoryStatus.toLowerCase()}`}>{rowData.inventoryStatus}</span>;
-    };
-
-    const rowExpansionTemplate = (data) => {
-        return (
-            <div className="orders-subtable">
-                <h5>Orders for {data.name}</h5>
-                <DataTable value={data.orders} responsiveLayout="scroll">
-                    <Column field="id" header="Id" sortable></Column>
-                    <Column field="customer" header="Customer" sortable></Column>
-                    <Column field="date" header="Date" sortable></Column>
-                    <Column field="amount" header="Amount" body={amountBodyTemplate} sortable></Column>
-                    <Column field="status" header="Status" body={statusOrderBodyTemplate} sortable></Column>
-                    <Column headerStyle={{ width: '4rem' }} body={searchBodyTemplate}></Column>
-                </DataTable>
-            </div>
-        );
-    };
-
-    const header = <Button icon={allExpanded ? 'pi pi-minus' : 'pi pi-plus'} label={allExpanded ? 'Collapse All' : 'Expand All'} onClick={toggleAll} className="w-11rem" />;
-
-    const headerTemplate = (data) => {
-        return (
-            <React.Fragment>
-                <img alt={data.representative.name} src={`${contextPath}/demo/images/avatar/${data.representative.image}`} width="32" style={{ verticalAlign: 'middle' }} />
-                <span className="font-bold ml-2">{data.representative.name}</span>
-            </React.Fragment>
-        );
-    };
-
-    const footerTemplate = (data) => {
-        return (
-            <React.Fragment>
-                <td colSpan="4" style={{ textAlign: 'right' }} className="text-bold pr-6">
-                    Total Customers
-                </td>
-                <td>{calculateCustomerTotal(data.representative.name)}</td>
-            </React.Fragment>
-        );
-    };
-
-    const calculateCustomerTotal = (name) => {
-        let total = 0;
-
-        if (customers3) {
-            for (let customer of customers3) {
-                if (customer.representative.name === name) {
-                    total++;
-                }
-            }
-        }
-
-        return total;
-    };
-
     const header1 = renderHeader1();
 
     return (
         <div className="grid">
             <div className="col-12">
                 <div className="card">
-                    <h5>Filter Menu</h5>
+                    <h5>Pets</h5>
                     <DataTable
                         value={customers1}
                         paginator
@@ -353,23 +247,11 @@ const TableDemo = () => {
                         emptyMessage="No customers found."
                         header={header1}
                     >
-                        <Column field="name" header="Name" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
-                        <Column header="Country" filterField="country.name" style={{ minWidth: '12rem' }} body={countryBodyTemplate} filter filterPlaceholder="Search by country" filterClear={filterClearTemplate} filterApply={filterApplyTemplate} />
-                        <Column
-                            header="Agent"
-                            filterField="representative"
-                            showFilterMatchModes={false}
-                            filterMenuStyle={{ width: '14rem' }}
-                            style={{ minWidth: '14rem' }}
-                            body={representativeBodyTemplate}
-                            filter
-                            filterElement={representativeFilterTemplate}
-                        />
-                        <Column header="Date" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
-                        <Column header="Balance" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />
+                        <Column field="name" header="Nome" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                        <Column field="name" header="Raça" filter filterPlaceholder="Search by name" style={{ minWidth: '12rem' }} />
+                        <Column header="Data de Cadastro" filterField="date" dataType="date" style={{ minWidth: '10rem' }} body={dateBodyTemplate} filter filterElement={dateFilterTemplate} />
+                        <Column header="Idade" filterField="balance" dataType="numeric" style={{ minWidth: '10rem' }} body={balanceBodyTemplate} filter filterElement={balanceFilterTemplate} />
                         <Column field="status" header="Status" filterMenuStyle={{ width: '14rem' }} style={{ minWidth: '12rem' }} body={statusBodyTemplate} filter filterElement={statusFilterTemplate} />
-                        <Column field="activity" header="Activity" showFilterMatchModes={false} style={{ minWidth: '12rem' }} body={activityBodyTemplate} filter filterElement={activityFilterTemplate} />
-                        <Column field="verified" header="Verified" dataType="boolean" bodyClassName="text-center" style={{ minWidth: '8rem' }} body={verifiedBodyTemplate} filter filterElement={verifiedFilterTemplate} />
                     </DataTable>
                 </div>
             </div>
